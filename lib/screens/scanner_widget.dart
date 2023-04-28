@@ -19,7 +19,10 @@ class _QRScannerState extends State<QRScanner> {
   TextEditingController mobController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    MobileScannerController scannerController = MobileScannerController();
+    MobileScannerController scannerController = MobileScannerController(
+      torchEnabled: true,
+      detectionSpeed: DetectionSpeed.unrestricted,
+    );
     String guess = "";
     int guessCounter = 0;
     return Column(
@@ -31,7 +34,7 @@ class _QRScannerState extends State<QRScanner> {
         Center(
           child: SizedBox(
             width: 300,
-            height: 300,
+            height: 150,
             child: MobileScanner(
               controller: scannerController,
               onDetect: (capture) async {
@@ -40,7 +43,7 @@ class _QRScannerState extends State<QRScanner> {
 
                 for (var barcode in barcodes) {
                   print("Random Guess : ${barcode.rawValue}");
-                  if (guessCounter >= 3) {
+                  if (guessCounter >= 8) {
                     scannerController.stop();
                     setState(() {
                       scannedData = guess;
@@ -98,11 +101,15 @@ class _QRScannerState extends State<QRScanner> {
                                           mobController.text,
                                         );
                                         scannerController.start();
+                                        nameController.text = "";
+                                        mobController.text = "";
                                         Navigator.pop(context);
                                       },
                                       child: const Text("Create Account")),
                                   ElevatedButton(
                                       onPressed: () {
+                                        nameController.text = "";
+                                        mobController.text = "";
                                         scannerController.start();
                                         Navigator.pop(context);
                                       },
